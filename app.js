@@ -58,6 +58,22 @@ const takeComputerSign = (() => {
     return { take };
 })();
 
+// Renders current player's sign on the gameboard.
+const playerMove = (() => {
+    const slots = gameboard.slots;
+    slots.forEach((slot) => {
+        slot.addEventListener('click', () => {
+            if (slot.textContent === '') {
+                slot.textContent = takeUserSign.take();
+                winCheck.check();
+                setTimeout(() => {
+                    computerDecide.setRandomMove();
+                }, 200)
+            }
+        })
+    })
+})();
+
 // In case of victory, shows the victory screen and restarts the game.
 const victory = (() => {
     function winScreen(condition, winner) {
@@ -91,6 +107,7 @@ const winCheck = (() => {
             ((gameboard.slots[2].textContent === 'x') && (gameboard.slots[5].textContent === 'x') && (gameboard.slots[8].textContent === 'x')) ||
             ((gameboard.slots[0].textContent === 'x') && (gameboard.slots[4].textContent === 'x') && (gameboard.slots[8].textContent === 'x')) ||
             ((gameboard.slots[2].textContent === 'x') && (gameboard.slots[4].textContent === 'x') && (gameboard.slots[6].textContent === 'x'))) {
+                restartFunc.restartGame();
                 victory.winScreen('The winner is:', 'x');
         } else if
             (((gameboard.slots[0].textContent === 'o') && (gameboard.slots[1].textContent === 'o') && (gameboard.slots[2].textContent === 'o')) || 
@@ -101,10 +118,12 @@ const winCheck = (() => {
             ((gameboard.slots[2].textContent === 'o') && (gameboard.slots[5].textContent === 'o') && (gameboard.slots[8].textContent === 'o')) ||
             ((gameboard.slots[0].textContent === 'o') && (gameboard.slots[4].textContent === 'o') && (gameboard.slots[8].textContent === 'o')) ||
             ((gameboard.slots[2].textContent === 'o') && (gameboard.slots[4].textContent === 'o') && (gameboard.slots[6].textContent === 'o'))) {
+                restartFunc.restartGame();
                 victory.winScreen('The winner is:', 'o');
         } else if ((gameboard.slots[0].textContent !== '') && (gameboard.slots[1].textContent !== '') && (gameboard.slots[2].textContent !== '') &&
         (gameboard.slots[3].textContent !== '') && (gameboard.slots[4].textContent !== '') && (gameboard.slots[5].textContent !== '') &&
         (gameboard.slots[6].textContent !== '') && (gameboard.slots[7].textContent !== '') && (gameboard.slots[8].textContent !== '')) {
+            restartFunc.restartGame();
             victory.winScreen("It's a draw", "");
         }
     };
@@ -129,25 +148,9 @@ const computerDecide = (() => {
 })();
 
 // If the user has pressed on "o" button, then the computer will go first.
-const goCompFirstOnO = (() => {
+const compGoesFirstOnO = (() => {
     const button = document.querySelector('#o-btn');
     button.addEventListener('click', () => {
         computerDecide.setRandomMove();
-    })
-})();
-
-// Renders current player's sign on the gameboard.
-const playerMove = (() => {
-    const slots = gameboard.slots;
-    slots.forEach((slot) => {
-        if (slot.textContent === '') {
-            slot.addEventListener('click', () => {
-                slot.textContent = takeUserSign.take();
-                winCheck.check();
-                setTimeout(() => {
-                    computerDecide.setRandomMove();
-                }, 250)
-            })
-        }
     })
 })();
